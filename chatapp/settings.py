@@ -41,10 +41,14 @@ django_installed_apps = [
 ]
 
 # Local apps
-local_apps = ['users']
+local_apps = [
+    'users'
+]
 
 # Apps which are imported from modules
-third_party_apps = []
+third_party_apps = [
+    'rest_framework'
+]
 
 INSTALLED_APPS = django_installed_apps + local_apps + third_party_apps
 
