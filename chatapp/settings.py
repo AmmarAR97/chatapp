@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from envconfig import fetch_env_variable
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&pah*uj72nzia%4un6d+f1nf3qr(*c+vjjd$-2ybk((1a-)5$p'
+SECRET_KEY = fetch_env_variable('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = fetch_env_variable('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -75,8 +76,12 @@ WSGI_APPLICATION = 'chatapp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': fetch_env_variable('DB_ENGINE'),
+        'NAME': fetch_env_variable('DB_NAME'),
+        'USER': fetch_env_variable('DB_USER'),
+        'PASSWORD': fetch_env_variable('DB_PASSWORD'),
+        'HOST': fetch_env_variable('DB_HOST'),
+        'PORT': fetch_env_variable('DB_PORT'),
     }
 }
 
