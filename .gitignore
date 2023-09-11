@@ -1,0 +1,94 @@
+# chatapp
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+.installed.cfg
+*.egg
+.eggs/
+
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Pycharm project files
+.idea/
+
+# PyTest cache
+.pytest_cache/
+
+# Coverage
+.coverage
+coverage.xml
+
+
+# Tox
+.tox/
+.cache/
+.python-version
+
+# VirtualEnv
+.venv/
+
+# Developers
+*.sw*
+.DS_Store
+
+# example database
+drf_example
+
+
+*.pyc
+*.db
+*~
+.*
+share/
+/site/
+/htmlcov/
+/coverage/
+/build/
+/dist/
+/*.egg-info/
+/env/
+MANIFEST
+coverage.*
+.env
+lib/
+lib64/
+lib64
+bin
+bin/
+!.gitignore
+!.travis.yml
+!.isort.cfg
+pyvenv.cfg
+bin/
+nohup.out
+doyourthng/apikey.json
+celerybeat.pid
+start_gnicorn.sh
+celerybeat-schedule
+w1-1.log
+w1.log
+w2-1.log
+w2.log
+w3-1.log
+w3.log
+w1.pid
+w2.pid
+w3.pid
+*.log
+joblog/
+8.0
+LICENSE.txt
+tcl/
+venvdyt/
+public/
+
