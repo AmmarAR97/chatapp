@@ -1,8 +1,8 @@
 from rest_framework import status
-from rest_framework.generics import (CreateAPIView, GenericAPIView)
+from rest_framework.generics import (CreateAPIView, GenericAPIView, UpdateAPIView)
 from rest_framework.response import Response
 from .models import Users
-from .serializers import (UserRegistrationSerializer, UserLoginSerializer)
+from .serializers import (UserRegistrationSerializer, UserLoginSerializer, UserUpdateSerializer)
 from rest_framework.permissions import (AllowAny, IsAuthenticated)
 
 
@@ -91,3 +91,43 @@ class UserLoginView(GenericAPIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+
+class UserUpdateView(UpdateAPIView):
+    """
+    View for updating user details.
+
+    This view allows authenticated users to update their user details.
+
+    Request (authenticated user):
+    - PATCH data: {
+        'first_name': 'NewFirstName',
+        'last_name': 'NewLastName',
+        'contact_number': 'NewContactNumber',
+        'gender': 'new_gender',
+        'birth_date': 'new_birth_date'
+      }
+
+    Response (successful update):
+    - Status Code: 200 (OK)
+    - Response Data: {'message': 'User data updated successfully', 'data': Updated user details}
+
+    Response (failed update):
+    - Status Code: 400 (Bad Request)
+    - Response Data: Validation errors
+    """
+    queryset = Users.objects.all()
+    serializer_class = UserUpdateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    def patch(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(
+            {'message': 'User data updated successfully', 'data': serializer.data},
+            status=status.HTTP_200_OK
+        )

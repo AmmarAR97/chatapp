@@ -62,3 +62,10 @@ class UserLoginSerializer(serializers.Serializer):
 
         data['access_token'] = user.get_tokens_for_user()
         return data
+
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Users
+        fields = ('first_name', 'last_name', 'contact_number', 'gender', 'birth_date')
+
