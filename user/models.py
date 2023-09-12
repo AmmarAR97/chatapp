@@ -3,7 +3,7 @@ from django.db import models
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
-class User(AbstractUser):
+class Users(AbstractUser):
     gender = [
         ('male', 'Male'),
         ('female', 'Female'),
@@ -21,10 +21,8 @@ class User(AbstractUser):
 
     def get_tokens_for_user(self):
         refresh = RefreshToken.for_user(self)
-
         return {
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
+            'access_token': str(refresh.access_token),
         }
 
     def __str__(self):
