@@ -41,7 +41,10 @@ class UserLoginSerializer(serializers.Serializer):
 
         # Check if either username or email is provided
         if not (username or email):
-            raise serializers.ValidationError("Either username or email is required.")
+            # raise serializers.ValidationError("Either username or email is required.")
+            raise serializers.ValidationError(
+                {'message': 'Either username or email is required.', 'access_token': None}
+            )
 
         # Check if the user is authenticated based on provided username/email and password
         if username and email:
@@ -54,7 +57,8 @@ class UserLoginSerializer(serializers.Serializer):
             user = None
 
         if user is None:
-            raise serializers.ValidationError("Invalid credentials.")
+            # raise serializers.ValidationError("Invalid credentials.")
+            raise serializers.ValidationError({'message': 'Invalid credentials.', 'access_token': None})
 
         data['access_token'] = user.get_tokens_for_user()
         return data

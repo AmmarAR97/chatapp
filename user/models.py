@@ -21,9 +21,7 @@ class Users(AbstractUser):
 
     def get_tokens_for_user(self):
         refresh = RefreshToken.for_user(self)
-        return {
-            'access_token': str(refresh.access_token),
-        }
+        return str(refresh.access_token)
 
     def __str__(self):
         return self.username

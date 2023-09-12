@@ -1,10 +1,9 @@
 from rest_framework import status
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import (CreateAPIView, GenericAPIView)
 from rest_framework.response import Response
 from .models import Users
-from .serializers import UserRegistrationSerializer, UserLoginSerializer
-from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from .serializers import (UserRegistrationSerializer, UserLoginSerializer)
+from rest_framework.permissions import (AllowAny, IsAuthenticated)
 
 
 class UserRegistrationView(CreateAPIView):
@@ -51,17 +50,44 @@ class UserRegistrationView(CreateAPIView):
         return Response(response_data, status=status.HTTP_201_CREATED)
 
 
-class UserLoginView(APIView):
+class UserLoginView(GenericAPIView):
+    """
+    View for user login.
+
+    This view allows users to log in by providing their username/email and password.
+    Upon successful login, an authentication token is generated and returned.
+
+    Request:
+    - POST data: {'username': 'user1', 'password': 'password'}
+    - POST data optional: {'email': 'user1@neofi.com', 'username': 'user1', 'password': 'password'}
+
+    Response (successful login):
+    - Status Code: 200 (OK)
+    - Response Data:
+        {
+            'message': 'Login successful',
+            'token': 'your-auth-token-string'
+        }
+    """
 
     permission_classes = [AllowAny]
+    serializer_class = UserLoginSerializer
 
     def post(self, request, *args, **kwargs):
-        serializer = UserLoginSerializer(data=request.data)
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
+        # Create or retrieve an authentication token for the user
         access_token = serializer.validated_data.get('access_token')
 
         if access_token:
-            return Response({'access_token': access_token}, status=status.HTTP_200_OK)
+            return Response(
+                {'message': 'Login successful', 'access_token': access_token},
+                status=status.HTTP_200_OK
+            )
         else:
-            return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(
+                {'message': 'Login failed or something went wrong!', 'access_token': None},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
