@@ -11,21 +11,30 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-from envconfig import fetch_env_variable
 from datetime import timedelta
+import environ
 import os
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Take environment variables from .env file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = fetch_env_variable('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = fetch_env_variable('DEBUG')
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -64,7 +73,6 @@ local_apps = [
 third_party_apps = [
     'rest_framework',
     'rest_framework_simplejwt',
-    'rest_framework_simplejwt.token_blacklist',
     'channels',
     'daphne',
 ]
@@ -101,12 +109,12 @@ STATIC_URL = 'static/'
 
 DATABASES = {
     'default': {
-        'ENGINE': fetch_env_variable('DB_ENGINE'),
-        'NAME': fetch_env_variable('DB_NAME'),
-        'USER': fetch_env_variable('DB_USER'),
-        'PASSWORD': fetch_env_variable('DB_PASSWORD'),
-        'HOST': fetch_env_variable('DB_HOST'),
-        'PORT': fetch_env_variable('DB_PORT'),
+        'ENGINE': env('DB_ENGINE'),
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT'),
     }
 }
 
@@ -125,7 +133,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'chatapp.middleware.CustomSessionMiddleware',
 ]
 
 # Password validation
