@@ -28,6 +28,24 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         return user
 
 
+def authenticate_user(username, email, password):
+    if username and email:
+        user = authenticate(username=username, email=email, password=password)
+    elif username:
+        user = authenticate(username=username, password=password)
+    elif email:
+        user = authenticate(email=email, password=password)
+    else:
+        user = None
+
+    if user:
+        # Set user.is_online to True
+        user.is_online = True
+        user.save()
+
+    return user
+
+
 class UserLoginSerializer(serializers.Serializer):
 
     username = serializers.CharField(required=False)
@@ -47,20 +65,14 @@ class UserLoginSerializer(serializers.Serializer):
             )
 
         # Check if the user is authenticated based on provided username/email and password
-        if username and email:
-            user = authenticate(username=username, email=email, password=password)
-        elif username:
-            user = authenticate(username=username, password=password)
-        elif email:
-            user = authenticate(email=email, password=password)
-        else:
-            user = None
+        user = authenticate_user(username, email, password)
 
         if user is None:
             # raise serializers.ValidationError("Invalid credentials.")
             raise serializers.ValidationError({'message': 'Invalid credentials.', 'access_token': None})
 
-        data['access_token'] = user.get_tokens_for_user()
+        # data['access_token'] = user.get_tokens_for_user()
+        data['access_token'] = user.generate_user_access_token()
         return data
 
 

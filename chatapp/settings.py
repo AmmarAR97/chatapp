@@ -184,6 +184,7 @@ AUTHENTICATION_BACKENDS = (
 
 WSGI_APPLICATION = 'chatapp.wsgi.application'
 ASGI_APPLICATION = 'chatapp.asgi.application'
+ASGI_THREADS = 1000
 
 # # Configure the channel layer to use Redis  - For production
 # CHANNEL_LAYERS = {

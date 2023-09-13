@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from .models import Users
 from .serializers import (UserRegistrationSerializer, UserLoginSerializer, UserUpdateSerializer)
 from rest_framework.permissions import (AllowAny, IsAuthenticated)
+from rest_framework.authtoken.views import ObtainAuthToken
 
 
 class UserRegistrationView(CreateAPIView):
@@ -90,9 +91,9 @@ class UserLoginView(GenericAPIView):
                 {'message': 'Login failed or something went wrong!', 'access_token': None},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-
-class UserUpdateView(UpdateAPIView):
+class UserUpdateView(LoginRequiredMixin, UpdateAPIView):
     """
     View for updating user details.
 
@@ -117,7 +118,7 @@ class UserUpdateView(UpdateAPIView):
     """
     queryset = Users.objects.all()
     serializer_class = UserUpdateSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def get_object(self):
         return self.request.user
