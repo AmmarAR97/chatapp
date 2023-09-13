@@ -64,7 +64,8 @@ local_apps = [
 third_party_apps = [
     'rest_framework',
     # 'rest_framework_simplejwt',
-    'channels'
+    'channels',
+    'daphne', # For ASGI server
 ]
 
 INSTALLED_APPS = third_party_apps + django_installed_apps + local_apps
@@ -184,17 +185,23 @@ AUTHENTICATION_BACKENDS = (
 WSGI_APPLICATION = 'chatapp.wsgi.application'
 ASGI_APPLICATION = 'chatapp.asgi.application'
 
-# Configure the channel layer to use Redis
+# # Configure the channel layer to use Redis  - For production
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             # Point to your Redis server
+#             "hosts": [("localhost", 6379)],
+#         },
+#     },
+# }
+
+# For dev/ testing on local server
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            # Point to your Redis server
-            "hosts": [("localhost", 6379)],
-        },
-    },
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
 }
-
 # ----------------------------------------------- Media Path ---------------------------------------------
 
 MEDIA_URL = '/media/'  # The URL where media files are served
