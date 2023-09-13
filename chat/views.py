@@ -42,7 +42,17 @@ class StartChatView(GenericAPIView):
             # Upgrade the request to WebSocket API
             channel_layer = get_channel_layer()
             room_name = f"user_"
-            channel_layer.group_add(room_name, self.channel_name)
+            channel_layer.send(
+                user.private_channel_name,
+                {
+                    'type': 'chatroom.message',
+                    'message': 'message',
+                    'username': 'self.user_name',
+                    'receiver_user_id': 'receiver_user_id',
+                    'chat_type': 'private',
+                    'sent_by': 'self.user_id'
+                }
+            )
             return Response({'message': 'WebSocket connection initiated'}, status=status.HTTP_101_SWITCHING_PROTOCOLS)
         else:
             return Response({'error': 'User is not online'}, status=status.HTTP_400_BAD_REQUEST)
