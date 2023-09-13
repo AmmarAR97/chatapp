@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from .models import Users
 from .serializers import (UserRegistrationSerializer, UserLoginSerializer, UserUpdateSerializer)
 from rest_framework.permissions import (AllowAny, IsAuthenticated)
-from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class UserRegistrationView(CreateAPIView):
