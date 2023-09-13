@@ -24,14 +24,6 @@ class Users(AbstractUser):
         refresh = RefreshToken.for_user(self)
         return f"{str(refresh.access_token)}"
 
-    # def generate_user_access_token(self):
-    #     """
-    #     Generate a token for the user.
-    #     """
-    #     token = default_token_generator.make_token(self)
-    #     # uid = urlsafe_base64_encode(force_bytes(self.pk))
-    #     return token
-
     def __str__(self):
         return self.username
 

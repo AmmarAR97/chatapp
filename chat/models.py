@@ -11,18 +11,6 @@ class ChatBaseModel(models.Model):
         abstract = True
 
 
-# class Connection(ChatBaseModel):
-#
-#     user1 = models.ForeignKey(Users, on_delete=models.CASCADE)
-#     user2 = models.ForeignKey(Users, on_delete=models.CASCADE)
-#     is_active = models.BooleanField(default=True)
-#     is_blocked_by_user1 = models.BooleanField(default=False)
-#     reported_by_user1 = models.BooleanField(default=False)
-#
-#     def __str__(self):
-#         return f'Connection between {self.user1.username} and {self.user2.username}'
-
-
 class MessageRecord(ChatBaseModel):
 
     TYPE_OF_CONTENT = (
