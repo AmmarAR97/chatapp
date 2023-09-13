@@ -1,7 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-# from rest_framework_simplejwt.tokens import RefreshToken
-from django.contrib.auth.tokens import default_token_generator
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class Users(AbstractUser):
@@ -16,23 +15,22 @@ class Users(AbstractUser):
     birth_date = models.DateField(blank=True, null=True)
     is_online = models.BooleanField(default=False)
     is_banned = models.BooleanField(default=False)
-    # for last_seen we can user last_login field that comes by default in AbstractBaseUser
-    # last_seen = models.DateTimeField(null=True, blank=True)
     private_channel_name = models.CharField(max_length=35, null=True, blank=True)
+    last_activity = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # def get_tokens_for_user(self):
-    #     refresh = RefreshToken.for_user(self)
-    #     return str(refresh.access_token)
+    def get_tokens_for_user(self):
+        refresh = RefreshToken.for_user(self)
+        return str(refresh.access_token)
 
-    def generate_user_access_token(self):
-        """
-        Generate a token for the user.
-        """
-        token = default_token_generator.make_token(self)
-        # uid = urlsafe_base64_encode(force_bytes(self.pk))
-        return token
+    # def generate_user_access_token(self):
+    #     """
+    #     Generate a token for the user.
+    #     """
+    #     token = default_token_generator.make_token(self)
+    #     # uid = urlsafe_base64_encode(force_bytes(self.pk))
+    #     return token
 
     def __str__(self):
         return self.username

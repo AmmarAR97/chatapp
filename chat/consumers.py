@@ -70,10 +70,10 @@ import datetime
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
-from .helper_functions import (
-    user_connection_status, get_user_channel_name, save_chat, community_manager,groups_user_is_part_of,
-    get_users_chat_list, get_users_chat_history, get_users_chat_profile
-)
+# from .helper_functions import (
+#     user_connection_status, get_user_channel_name, save_chat, community_manager,groups_user_is_part_of,
+#     get_users_chat_list, get_users_chat_history, get_users_chat_profile
+# )
 from asgiref.sync import async_to_sync
 from django.core.serializers.json import DjangoJSONEncoder
 
@@ -95,12 +95,13 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
         channel_name = self.channel_name
 
         await self.accept()
-        await user_connection_status(status="online", user=self.user_id, channel_name=channel_name)
+        # await user_connection_status(status="online", user=self.user_id, channel_name=channel_name)
 
     async def disconnect(self, close_code):
+        pass
         # Note that in some rare cases (power loss, etc) disconnect may fail
         # to run; this naive example would leave zombie channel names around.
-        await user_connection_status(status="offline", user=self.user_id)
+        # await user_connection_status(status="offline", user=self.user_id)
 
     # Receive message from WebSocket
     async def receive(self, text_data):
@@ -128,7 +129,8 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
 
         send_to = None  # --> user_id / group_name
         if text_data_json['chat_type'] == "private":
-            send_to = await get_user_channel_name(user_id=text_data_json['send_to'])
+            pass
+            # send_to = await get_user_channel_name(user_id=text_data_json['send_to'])
 
         # elif text_data_json['chat_type'] == "group": # Todo : Discuss with Deepak
         #     send_to = text_data_json['send_to']
@@ -145,15 +147,16 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
                 }
             )
         else:  # Else save message to DB
-            await save_chat(
-                {
-                    "sender": self.user_id,
-                    "receiver_user_id": receiver_user_id,
-                    "message": message,
-                    'chat_type': text_data_json['chat_type']
-                },
-                text_data_json['chat_type']
-            )
+            pass
+            # await save_chat(
+            #     {
+            #         "sender": self.user_id,
+            #         "receiver_user_id": receiver_user_id,
+            #         "message": message,
+            #         'chat_type': text_data_json['chat_type']
+            #     },
+            #     text_data_json['chat_type']
+            # )
 
     # Receive message from channel_name
     async def chatroom_message(self, event):
@@ -174,12 +177,19 @@ class PersonalChatConsumer(AsyncWebsocketConsumer):
         )
 
         # Saving message to DB
-        await save_chat(
-            {
-                "sender": sent_by,
-                "receiver_user_id": receiver_user_id,
-                "message": message,
-                'chat_type': chat_type
-            },
-            chat_type
-        )
+        # await save_chat(
+        #     {
+        #         "sender": sent_by,
+        #         "receiver_user_id": receiver_user_id,
+        #         "message": message,
+        #         'chat_type': chat_type
+        #     },
+        #     chat_type
+        # )
+
+    async def update_user_last_activity(self):
+        if self.scope["user"].is_authenticated:
+            pass
+            # user_profile = UserProfile.objects.get(user=self.scope["user"])
+            # user_profile.last_activity = timezone.now()
+            # user_profile.save()
