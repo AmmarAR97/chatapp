@@ -72,7 +72,8 @@ class UserLoginSerializer(serializers.Serializer):
             raise serializers.ValidationError({'message': 'Invalid credentials.', 'access_token': None})
 
         data['access_token'] = user.get_tokens_for_user()
-        # data['access_token'] = user.generate_user_access_token()
+        user.is_online = True
+        user.save()
         return data
 
 

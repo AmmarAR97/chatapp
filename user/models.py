@@ -22,7 +22,7 @@ class Users(AbstractUser):
 
     def get_tokens_for_user(self):
         refresh = RefreshToken.for_user(self)
-        return str(refresh.access_token)
+        return f"{str(refresh.access_token)}"
 
     # def generate_user_access_token(self):
     #     """

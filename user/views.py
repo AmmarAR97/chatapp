@@ -1,9 +1,11 @@
 from rest_framework import status
 from rest_framework.generics import (CreateAPIView, GenericAPIView, UpdateAPIView)
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Users
 from .serializers import (UserRegistrationSerializer, UserLoginSerializer, UserUpdateSerializer)
 from rest_framework.permissions import (AllowAny, IsAuthenticated)
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class UserRegistrationView(CreateAPIView):
@@ -131,3 +133,17 @@ class UserUpdateView(UpdateAPIView):
             {'message': 'User data updated successfully', 'data': serializer.data},
             status=status.HTTP_200_OK
         )
+
+
+class UserLogoutView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        user_obj = request.user
+        if user_obj:
+            user_obj.is_online = False
+            user_obj.save()
+            return Response({'message': 'Logout successful.'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'User not found'}, status=status.HTTP_400_BAD_REQUEST)
